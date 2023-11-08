@@ -12,7 +12,10 @@ import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * ログイン時の挙動を制御する<br>
- * 「/login」
+ * 「/login」にリクエストに対してログイン認証を実施<br>
+ * 認証成功時は「/」にリダイレクト<br>
+ * 認証失敗時はエラーページにリダイレクト<br>
+ * その他制約は設けない
  */
 @Configuration
 @EnableWebSecurity
@@ -21,11 +24,6 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		System.out.println("in security	");
-		String pass = "eightbit";
-		String hashPass = this.passwordEncoder().encode("eightbit");
-		System.out.println(this.passwordEncoder().encode("eightbit"));
-		System.out.println(this.passwordEncoder().matches(pass, hashPass));
 
 		http.formLogin(login -> login
 				// 指定したURLがリクエストされるとログイン認証を行う。
@@ -67,8 +65,5 @@ public class SecurityConfig {
 
 	}
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+
 }

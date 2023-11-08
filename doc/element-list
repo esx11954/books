@@ -1,0 +1,8 @@
+com.eightbit.books
+com.eightbit.books.config
+com.eightbit.books.controller
+com.eightbit.books.dao
+com.eightbit.books.entity
+com.eightbit.books.model
+com.eightbit.books.repository
+com.eightbit.books.service

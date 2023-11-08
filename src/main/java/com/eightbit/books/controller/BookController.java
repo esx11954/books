@@ -18,6 +18,9 @@ import com.eightbit.books.service.BookService;
 
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * 書籍ページに関連するコントローラ
+ */
 @Controller
 public class BookController {
 
