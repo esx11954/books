@@ -29,6 +29,15 @@ public class HistoryService {
 	@Autowired
 	private StatusRepository statusRepo;
 
+	
+	public List<History> findAll(){
+		return historyRepo.findAllByOrderByCheckoutDateDesc();
+	}
+	
+	public History findOne(int historyId) {
+		return historyRepo.findById(historyId);
+	}
+	
 	public List<History> searchHistory(HistorySearchQuery searchQuery) {
 		String fromDate = searchQuery.getFrom();
 		String toDate = searchQuery.getTo();
