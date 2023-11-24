@@ -33,22 +33,16 @@
 			</div>
 		</div>
 		<div class="container">
-		    <th:block th:if="${searchedQuery != null}">
+		    <th:block th:if="${searchName != null}">
 				<div class="serch-query">
 					<h3>検索条件</h3>
-					<th:block th:if="${searchedQuery.radioValue == 0}">
-						<div class="search">
-							<pre>書籍名&#009;：</pre><p th:text="${searchedQuery.queryText}"></p>
-						</div>
-					</th:block>
-					<th:block th:if="${searchedQuery.radioValue == 1}">
-						<div class="search">
-							<pre>著者&#009;：</pre><p th:text="${searchedQuery.queryText}"></p>
-						</div>
-					</th:block>
 					<div class="search">
-						<pre>件数&#009;：</pre><p th:text="${count}"></p>
+						<pre>名前&#009;：</pre><p th:text="${searchName}"></p>
 					</div>
+					<div class="search">
+						<pre>件数&#009;：</pre><p th:text="${userList.size}"></p>
+					</div>
+
 				</div>
 			</th:block>
 		    <table class="table table-striped">

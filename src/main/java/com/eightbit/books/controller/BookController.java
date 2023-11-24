@@ -13,21 +13,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.eightbit.books.entity.Books;
 import com.eightbit.books.entity.Genre;
 import com.eightbit.books.model.BookSearchQuery;
-import com.eightbit.books.repository.BooksRepository;
 import com.eightbit.books.service.BookService;
 
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class BookController {
 
-	@Autowired
-	private BooksRepository booksRepo;
-
 	private final BookService bookService;
 
-	@Autowired
-	HttpSession session;
 
 	@Autowired
 	public BookController(BookService bookService) {
@@ -36,8 +29,7 @@ public class BookController {
 
 	@GetMapping(path = "/book/index")
 	public String routeToBookIndex(Model model) {
-		List<Books> bookList = booksRepo.findAllByOrderByTitleAsc();
-//		bookList.stream().forEach(b -> System.out.println(b.getTitle()));
+		List<Books> bookList = bookService.findAll();
 		model.addAttribute("bookList", bookList);
 		model.addAttribute("searchQuery", new BookSearchQuery());
 		return "bookIndex";
@@ -64,21 +56,18 @@ public class BookController {
 		model.addAttribute("count", bookList.size());
 
 		return "bookIndex";
-//		return "redirect:/book/index";
 	}
 
 	@GetMapping("/book/search/id")
 	public String searchBookId(Model model, @RequestParam("id") int bookId) {
 
-		Books book = booksRepo.findByBookId(bookId);
+		Books book = bookService.findOne(bookId);
 		model.addAttribute("book", book);
 		model.addAttribute("searchQuery", new Books());
 
 		return "bookDetail";
-//		return "redirect:/book/index";
 	}
 
-//	@ResponseBody
 	@PostMapping("/book/delete")
 	public String deleteBook(@RequestParam("id") int bookId) {
 		bookService.deleteBookAndHistoryData(bookId);
@@ -97,9 +86,8 @@ public class BookController {
 
 	@PostMapping("/book/checkout")
 	public String checkoutBook(Model model, @RequestParam("id") int bookId) {
-		Books book = booksRepo.findByBookId(bookId);
+		Books book = bookService.findOne(bookId);
 		model.addAttribute("book", book);
-//		session.setAttribute("bookId", bookId);
 		return "checkout";
 	}
 
