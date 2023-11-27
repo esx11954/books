@@ -17,11 +17,11 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		System.out.println("in security	");
-		String pass = "eightbit";
-		String hashPass = this.passwordEncoder().encode("eightbit");
-		System.out.println(this.passwordEncoder().encode("eightbit"));
-		System.out.println(this.passwordEncoder().matches(pass, hashPass));
+//		System.out.println("in security	");
+//		String pass = "eightbit";
+//		String hashPass = this.passwordEncoder().encode("eightbit");
+//		System.out.println(this.passwordEncoder().encode("eightbit"));
+//		System.out.println(this.passwordEncoder().matches(pass, hashPass));
 
 		http.formLogin(login -> login
 				// 指定したURLがリクエストされるとログイン認証を行う。

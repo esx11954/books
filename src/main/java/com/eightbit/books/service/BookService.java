@@ -42,7 +42,6 @@ public class BookService {
 	 * @return 特定書籍データ
 	 */
 	public Books findOne(int bookId) {
-//		return booksRepo.findByBookId(bookId);
 		return null;
 	}
 	
@@ -56,13 +55,6 @@ public class BookService {
 		String queryText = searchQuery.getQueryText();
 
 		List<Books> bookList = null;
-//		if (radioValue == 0) {
-////			書籍名検索
-//			bookList = booksRepo.findByTitleContaining(queryText);
-//		} else {
-////			著者検索
-//			bookList = booksRepo.findByAuthorContaining(queryText);
-//		}
 
 		return bookList;
 	}
@@ -73,8 +65,7 @@ public class BookService {
 	 * @return 特定書籍データ(複数)
 	 */
 	public List<Books> searchBookGenre(int genreId) {
-//		List<Books> bookList = booksRepo.findByGenreGenreId(genreId);
-//		return bookList;
+
 		return null;
 	}
 
@@ -84,11 +75,7 @@ public class BookService {
 	 * @param bookId
 	 */
 	public void deleteBookAndHistoryData(int bookId) {
-//		List<History> historyList = historyRepo.findByBooksBookId(bookId);
-//		List<Integer> historyIdList = historyList.stream().map(b -> b.getId()).collect(Collectors.toList());
-//		historyIdList.stream().forEach(id -> historyRepo.deleteById(id.longValue()));
-////		historyRepo.deleteAllById(historyIdList);
-//		booksRepo.deleteById((long) bookId);
+
 	}
 
 	/**
@@ -108,11 +95,11 @@ public class BookService {
 			break;
 		case 1:
 //			Not Available → Available
-//			book.setStatus(statusRepo.getReferenceById((long) 1));
+
 			break;
 		case 2:
 //			Available → Not Available
-//			book.setStatus(statusRepo.getReferenceById((long) 2));
+
 		}
 		booksRepo.save(book);
 	}
@@ -132,13 +119,7 @@ public class BookService {
 	 * @param genreId
 	 */
 	public void bookRegist(Books book, int genreId) {
-//		Genre genre = genreRepo.getReferenceById((long) genreId);
-//		Status status = statusRepo.getReferenceById((long) 1);
-//		book.setGenre(genre);
-//		book.setStatus(status);
-//		book.setRegistrationDate(new Date());
-//
-//		booksRepo.save(book);
+
 	}
 
 }
