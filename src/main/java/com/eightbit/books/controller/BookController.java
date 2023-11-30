@@ -21,9 +21,6 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class BookController {
 
-	@Autowired
-	private BooksRepository booksRepo;
-
 	private final BookService bookService;
 
 	@Autowired
@@ -36,7 +33,7 @@ public class BookController {
 
 	@GetMapping(path = "/book/index")
 	public String routeToBookIndex(Model model) {
-		List<Books> bookList = booksRepo.findAllByOrderByTitleAsc();
+		List<Books> bookList = bookService.findAll();
 //		bookList.stream().forEach(b -> System.out.println(b.getTitle()));
 		model.addAttribute("bookList", bookList);
 		model.addAttribute("searchQuery", new BookSearchQuery());
@@ -70,7 +67,7 @@ public class BookController {
 	@GetMapping("/book/search/id")
 	public String searchBookId(Model model, @RequestParam("id") int bookId) {
 
-		Books book = booksRepo.findByBookId(bookId);
+		Books book = bookService.findOne(bookId);
 		model.addAttribute("book", book);
 		model.addAttribute("searchQuery", new Books());
 
@@ -97,7 +94,7 @@ public class BookController {
 
 	@PostMapping("/book/checkout")
 	public String checkoutBook(Model model, @RequestParam("id") int bookId) {
-		Books book = booksRepo.findByBookId(bookId);
+		Books book = bookService.findOne(bookId);
 		model.addAttribute("book", book);
 //		session.setAttribute("bookId", bookId);
 		return "checkout";

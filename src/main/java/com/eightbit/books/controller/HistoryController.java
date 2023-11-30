@@ -18,9 +18,6 @@ import com.eightbit.books.service.HistoryService;
 @Controller
 public class HistoryController {
 
-	@Autowired
-	private HistoryRepository historyRepo;
-
 	private final HistoryService historyService;
 
 	@Autowired
@@ -30,7 +27,7 @@ public class HistoryController {
 
 	@GetMapping(path = "/")
 	public String routeToIndex(Model model) {
-		List<History> historyList = historyRepo.findAllByOrderByCheckoutDateDesc();
+		List<History> historyList = historyService.findAll();
 		model.addAttribute("historyList", historyList);
 		model.addAttribute("searchQuery", new HistorySearchQuery());
 		return "index";
@@ -50,7 +47,7 @@ public class HistoryController {
 	@GetMapping("/search/id")
 	public String searchHistoryId(Model model, @RequestParam("id") int historyId) {
 
-		History history = historyRepo.findById(historyId);
+		History history = historyService.findOne(historyId);
 		model.addAttribute("history", history);
 //		model.addAttribute("searchQuery", new Books());
 

@@ -19,9 +19,6 @@ import com.eightbit.books.service.UserService;
 @Controller
 public class UserController {
 
-	@Autowired
-	private UserRepository userRepo;
-
 	private final UserService userService;
 
 	@Autowired
@@ -31,7 +28,7 @@ public class UserController {
 
 	@GetMapping(path = "/user/index")
 	public String routeToUserIndex(Model model) {
-		List<User> userList = userRepo.findAll();
+		List<User> userList = userService.findAll();
 		model.addAttribute("userList", userList);
 
 		return "userIndex";
@@ -74,7 +71,7 @@ public class UserController {
 	@GetMapping("/user/json")
 	@ResponseBody
 	public List<User> getUserJson() {
-		List<User> userList = userRepo.findAll();
+		List<User> userList = userService.findAll();
 		return userList;
 	}
 

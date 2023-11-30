@@ -29,9 +29,27 @@ public class HistoryService {
 	@Autowired
 	private StatusRepository statusRepo;
 
+	public List<History> findAll(){
+		return historyRepo.findAllByOrderByCheckoutDateDesc();
+	}
+	
+	/**
+	 * ★貸出履歴検索(特定データ)
+	 * @param historyId
+	 * @return 貸出履歴特定データ
+	 */
+	public History findOne(int historyId) {
+		return historyRepo.findById(historyId);
+	}
+	
+	/**
+	 * ★貸出履歴検索(期間、利用者、書籍名)
+	 * @param searchQuery
+	 * @return 貸出履歴特定データ(複数)
+	 */
 	public List<History> searchHistory(HistorySearchQuery searchQuery) {
-		String fromDate = searchQuery.getFrom();
-		String toDate = searchQuery.getTo();
+		Date fromDate = ServiceUtility.parseDate(searchQuery.getFrom());
+		Date toDate = ServiceUtility.parseDate(searchQuery.getTo());
 		String book = searchQuery.getBookName();
 		String user = searchQuery.getUserName();
 
@@ -40,25 +58,25 @@ public class HistoryService {
 		if (book.isBlank() && user.isBlank()) {
 			// 日付のみで検索
 			historyList = historyRepo.findByCheckoutDateBetweenOrderByCheckoutDateDesc(
-					ServiceUtility.parseDate(fromDate), ServiceUtility.parseDate(toDate));
+					fromDate, toDate);
 
 		} else if (!book.isBlank() && user.isBlank()) {
 			// 日付と書籍名で検索
 			List<Integer> bookIdList = getBookIdList(book);
 			historyList = historyRepo.findByCheckoutDateBetweenAndBooksBookIdInOrderByCheckoutDateDesc(
-					ServiceUtility.parseDate(fromDate), ServiceUtility.parseDate(toDate), bookIdList);
+					fromDate, toDate, bookIdList);
 
 		} else if (book.isBlank() && !user.isBlank()) {
 			// 日付とユーザで検索
 			List<Integer> userIdList = getUserIdList(user);
 			historyList = historyRepo.findByCheckoutDateBetweenAndUserUserIdInOrderByCheckoutDateDesc(
-					ServiceUtility.parseDate(fromDate), ServiceUtility.parseDate(toDate), userIdList);
+					fromDate, toDate, userIdList);
 		} else {
 			// 日付、書籍名、ユーザで検索
 			List<Integer> bookIdList = getBookIdList(book);
 			List<Integer> userIdList = getUserIdList(user);
 			historyList = historyRepo.findByCheckoutDateBetweenAndBooksBookIdInAndUserUserIdInOrderByCheckoutDateDesc(
-					ServiceUtility.parseDate(fromDate), ServiceUtility.parseDate(toDate), bookIdList, userIdList);
+					fromDate, toDate, bookIdList, userIdList);
 		}
 		return historyList;
 
@@ -89,6 +107,10 @@ public class HistoryService {
 		return UserObjList.stream().map(u -> u.getUserId()).collect(Collectors.toList());
 	}
 
+	/**
+	 * ★貸出履歴特定データ削除
+	 * @param historyId
+	 */
 	public void deleteHistory(int historyId) {
 		History history = historyRepo.getReferenceById((long) historyId);
 		if (history.getReturned().equals("F")) {
@@ -118,6 +140,11 @@ public class HistoryService {
 		booksRepo.save(book);
 	}
 
+	/**
+	 * ★貸出履歴特定データ返却期限更新
+	 * @param historyId
+	 * @param dueDate
+	 */
 	public void updateDueDate(int historyId, String dueDate) {
 		History history = historyRepo.getReferenceById((long) historyId);
 		Date date = null;
@@ -126,6 +153,10 @@ public class HistoryService {
 		historyRepo.save(history);
 	}
 
+	/**
+	 * ★貸出履歴特定データ返却
+	 * @param historyId
+	 */
 	public void returnBook(int historyId) {
 		History history = historyRepo.getReferenceById((long) historyId);
 		Date nowDate = new Date();
@@ -135,6 +166,12 @@ public class HistoryService {
 		historyRepo.save(history);
 	}
 
+	/**
+	 * ★特定書籍貸出
+	 * @param bookId
+	 * @param userId
+	 * @param dueDateStr
+	 */
 	public void checkoutBook(int bookId, int userId, String dueDateStr) {
 		Books book = booksRepo.getReferenceById((long) bookId);
 		User user = userRepo.getReferenceById((long) userId);
@@ -147,7 +184,8 @@ public class HistoryService {
 		history.setCheckoutDate(checkoutDate);
 		history.setDueDate(dueDate);
 		history.setReturned("F");
-
 		historyRepo.save(history);
+		
+		this.decrementStock(bookId);	
 	}
 }
