@@ -147,9 +147,7 @@ public class HistoryService {
 	 */
 	public void updateDueDate(int historyId, String dueDate) {
 		History history = historyRepo.getReferenceById((long) historyId);
-		Date date = null;
-		date = ServiceUtility.parseDate(dueDate);
-		history.setDueDate(date);
+		history.setDueDate(ServiceUtility.parseDate(dueDate));
 		historyRepo.save(history);
 	}
 
@@ -159,8 +157,7 @@ public class HistoryService {
 	 */
 	public void returnBook(int historyId) {
 		History history = historyRepo.getReferenceById((long) historyId);
-		Date nowDate = new Date();
-		history.setReturnDate(nowDate);
+		history.setReturnDate(new Date());
 		history.setReturned("T");
 		this.incrementStock(history.getBooks().getBookId());
 		historyRepo.save(history);

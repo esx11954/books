@@ -25,6 +25,9 @@ public class UserService {
 	@Autowired
 	private HistoryRepository historyRepo;
 
+	/**
+	 * UserRepositoryからすべてのユーザーを取得
+	 */
 	public List<User> findAll(){
 		return userRepo.findAll();
 	}
